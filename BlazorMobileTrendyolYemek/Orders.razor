@@ -1,0 +1,41 @@
+﻿@using Models
+@inject Services.IOrderService orderService;
+
+
+
+
+@if (items == null)
+{  <Label Text="Loading..." FontAttributes="FontAttributes.Bold" VerticalTextAlignment="TextAlignment.Center" FontSize="12" /> }
+else
+{
+    @foreach (var item in items)
+    {
+        
+        <Frame CornerRadius="10" BackgroundColor="Color.Gold">
+
+                <StackLayout Orientation="StackOrientation.Horizontal" HorizontalOptions="LayoutOptions.Center">
+                    <Label Text="@item.customer.firstName" FontAttributes="FontAttributes.Bold" VerticalTextAlignment="TextAlignment.Center" FontSize="12" />
+                    <Label Text="@item.customer.lastName" FontAttributes="FontAttributes.Bold" VerticalTextAlignment="TextAlignment.Center" FontSize="12" />
+                    <Label Text="@item.address.address1" FontAttributes="FontAttributes.Bold" VerticalTextAlignment="TextAlignment.Center" FontSize="12" />
+                </StackLayout>
+            </Frame>
+    }
+}
+
+
+@code {
+
+    public List<Content> items { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await GetOrders();
+    }
+
+    private async Task<List<Content>> GetOrders()
+    {
+        var responseData = await orderService.GetOrdersDirectly();
+        return responseData;
+    }
+
+}
